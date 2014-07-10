@@ -38,6 +38,10 @@ function updateInboxCount() {
     });
 }
 
+chrome.webNavigation.onDOMContentLoaded.addListener(function() {
+    needsAuthentication = false;
+}, { url: [{urlEquals: feedUrl}] });
+
 chrome.webNavigation.onDOMContentLoaded.addListener(updateInboxCount, { url: [{urlContains: office365Url}] });
 chrome.webNavigation.onReferenceFragmentUpdated.addListener(updateInboxCount, { url: [{urlContains: office365Url}] });
 
@@ -50,16 +54,22 @@ chrome.browserAction.onClicked.addListener(function() {
 
     chrome.tabs.getAllInWindow(undefined, function(tabs) {
         var foundTab = false;
+
         $.each(tabs, function(i, tab) {
             if (tab.url && isOffice365Url(tab.url)) {
-                chrome.tabs.update(tab.id, {selected: true});
+                foundTab = foundTab || (tab.url !== feedUrl);
+
+                if(!needsAuthentication) {
+                    chrome.tabs.update(tab.id, {active: true});
+                    foundTab = true;
+                }
                 updateInboxCount();
-                foundTab = true;
             }
         });
 
-        if(!foundTab)
-            chrome.tabs.create({url: office365Url});
+        if(!foundTab) {
+            chrome.tabs.create({url: office365Url, active: !needsAuthentication});
+        }
     });
 });
 
