@@ -1,0 +1,19 @@
+{
+    "office365check_description": {
+        "message": "Displays the number of unread messages in your Office365 Mail inbox. You can also click the button to open your inbox."
+    },
+    "office365check_exception": {
+        "message": "exception: $1",
+        "placeholders": {
+            "1": {
+                "content": "$1"
+            }
+        }
+    },
+    "office365check_name": {
+        "message": "Office365 Mail Checker"
+    },
+    "office365check_node_error": {
+        "message": "Error: feed retrieved, but no &lt;fullcount&gt; node found"
+    }
+}

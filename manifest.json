@@ -1,0 +1,23 @@
+{
+    "background": {
+        "page": "background.html",
+        "persistent": false
+    },
+    "browser_action": {
+        "default_icon": "office365_not_logged_in.png"
+    },
+    "default_locale": "en",
+    "description": "__MSG_office365check_description__",
+    "icons": {
+        "128": "office365_128.png"
+    },
+    "manifest_version": 2,
+    "name": "__MSG_office365check_name__",
+    "permissions": [
+        "tabs",
+        "webNavigation",
+        "*://*.office365.com/",
+        "*://*.outlook.com/"
+    ],
+    "version": "0.0.1"
+}
