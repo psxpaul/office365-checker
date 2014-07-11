@@ -3,13 +3,12 @@ var Badge = function() {
         notLoggedInImage = $("#notLoggedInImage"),
         oldUnreadCount,
         loadingTimer = 0,
-        currentLoadingFrame = 0,
         loadingFrames = [".   ", " .  ", "  . ", "   ."];
 
     function paintLoadingFrame() {
         chrome.browserAction.setBadgeBackgroundColor({color:[255, 140, 0, 255]});
-        chrome.browserAction.setBadgeText({text:loadingFrames[currentLoadingFrame%loadingFrames.length]});
-        currentLoadingFrame++;
+        chrome.browserAction.setBadgeText({text:loadingFrames[0]});
+        loadingFrames.push(loadingFrames.shift());
     }
 
     function animateFlip() {
