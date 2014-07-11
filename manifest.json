@@ -15,6 +15,7 @@
     "name": "__MSG_office365check_name__",
     "permissions": [
         "tabs",
+        "alarms",
         "webNavigation",
         "*://*.office365.com/",
         "*://*.outlook.com/"

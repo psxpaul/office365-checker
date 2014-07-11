@@ -73,5 +73,11 @@ chrome.browserAction.onClicked.addListener(function() {
     });
 });
 
+chrome.alarms.create('office365-checker', { periodInMinutes: 1 });
+chrome.alarms.onAlarm.addListener(function(alarm) {
+    if (alarm.name == 'office365-checker') {
+        updateInboxCount();
+    }
+});
+
 updateInboxCount();
-setInterval(updateInboxCount, 1000 * 60);
