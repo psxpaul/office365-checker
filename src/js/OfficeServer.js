@@ -50,7 +50,6 @@ define(["jquery"], function($) {
                         chrome.tabs.update(tab.id, {active: true});
                         foundTab = true;
                     }
-                    updateInboxCount();
                 }
             });
 

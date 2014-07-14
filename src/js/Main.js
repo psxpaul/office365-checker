@@ -27,4 +27,5 @@ require(["jquery", "OfficeServer", "Badge"], function($, OfficeServer, Badge) {
     });
 
     updateInboxCount();
+    chrome.browserAction.onClicked.addListener(updateInboxCount);
 });
