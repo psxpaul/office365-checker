@@ -1,7 +1,9 @@
 require(["jquery", "OfficeServer", "Badge"], function($, OfficeServer, Badge) {
+    console.log(new Date().toLocaleTimeString() + " - loading everything!");
+
     function updateInboxCount() {
         Badge.startLoadingAnimation();
-        console.log("updating unread count...");
+        console.log(new Date().toLocaleTimeString() + " - updating unread count...");
 
         OfficeServer.getUnreadCount({
             success: function(unreadCount) {

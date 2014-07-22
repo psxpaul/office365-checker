@@ -66,7 +66,7 @@ define(["jquery"], function($) {
             }
 
             if(oldUnreadCount !== unreadCount) {
-                console.log("flipping badge   oldUnreadCount: " + oldUnreadCount + "    unreadCount: " + unreadCount);
+                console.log(new Date().toLocaleTimeString() + " - flipping badge   oldUnreadCount: " + oldUnreadCount + "    unreadCount: " + unreadCount);
                 animateFlip();
             }
             oldUnreadCount = unreadCount;
