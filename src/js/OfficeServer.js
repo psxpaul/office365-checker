@@ -15,6 +15,7 @@ define(["jquery"], function($) {
 
         $.ajax({
             url: feedUrl,
+            beforeSend: opts.before,
             statusCode: {
                 401: function() {
                     needsAuthentication = true;
