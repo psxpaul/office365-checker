@@ -13,6 +13,8 @@ require(["jquery", "OfficeServer", "Badge"], function($, OfficeServer, Badge) {
             },
             error: function() {
                 Badge.stopLoadingAnimation();
+		Badge.setUnreadCount();
+
                 console.log("error: ");
                 console.dir(arguments);
             }
