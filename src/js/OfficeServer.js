@@ -1,6 +1,6 @@
 define(["jquery"], function($) {
     var office365Url = "https://outlook.office365.com/",
-        feedUrl = office365Url + "ews/odata/Me/Inbox/Messages?$filter=IsRead%20eq%20false",
+        feedUrl = office365Url + "ews/odata/Me/Inbox/",
         needsAuthentication = false;
 
     function isOffice365Url(url) {
@@ -23,7 +23,7 @@ define(["jquery"], function($) {
             },
             success: function(data) {
                 needsAuthentication = false;
-                opts.success(data.value.length);
+                opts.success(data.UnreadItemCount);
             },
             error: opts.error
         });
