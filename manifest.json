@@ -17,8 +17,9 @@
         "tabs",
         "alarms",
         "webNavigation",
+        "notifications",
         "*://*.office365.com/",
         "*://*.outlook.com/"
     ],
-    "version": "0.0.5"
+    "version": "0.0.6"
 }

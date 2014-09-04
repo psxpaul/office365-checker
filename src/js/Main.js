@@ -1,4 +1,4 @@
-require(["jquery", "OfficeServer", "Badge"], function($, OfficeServer, Badge) {
+require(["jquery", "OfficeServer", "Badge", "Notifier"], function($, OfficeServer, Badge, Notifier) {
     console.log(new Date().toLocaleTimeString() + " - loading everything!");
 
     function updateInboxCount() {
@@ -10,10 +10,11 @@ require(["jquery", "OfficeServer", "Badge"], function($, OfficeServer, Badge) {
             success: function(unreadCount) {
                 Badge.stopLoadingAnimation();
                 Badge.setUnreadCount(unreadCount);
+                Notifier.notify(unreadCount);
             },
             error: function() {
                 Badge.stopLoadingAnimation();
-		Badge.setUnreadCount();
+                Badge.setUnreadCount();
 
                 console.log("error: ");
                 console.dir(arguments);
