@@ -7,10 +7,10 @@ require(["jquery", "OfficeServer", "Badge", "Notifier"], function($, OfficeServe
                 Badge.startLoadingAnimation();
                 console.log(new Date().toLocaleTimeString() + " - updating unread count...");
             },
-            success: function(unreadCount) {
+            success: function(unreadCount, unreadMessages) {
                 Badge.stopLoadingAnimation();
                 Badge.setUnreadCount(unreadCount);
-                Notifier.notify(unreadCount);
+                Notifier.notify(unreadCount, unreadMessages);
             },
             error: function() {
                 Badge.stopLoadingAnimation();

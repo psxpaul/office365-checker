@@ -8,15 +8,28 @@ define(["jquery"], function($) {
     });
 
     return {
-        notify: function(unreadCount) {
+        notify: function(unreadCount, unreadMessages) {
             if(typeof unreadCount !== "number" || unreadCount === 0) {
                 chrome.notifications.clear(notificationId, function(){});
-            } else {
-                chrome.notifications.create(notificationId, {
+            } else if(typeof unreadMessages === 'undefined') {
+                 chrome.notifications.create(notificationId, {
                     type: "basic",
                     title: "New Office365 Mail",
                     message: "You have " + unreadCount + " unread messages",
                     iconUrl: iconUrl
+                }, function() {});
+            } else {
+                var items = [];
+                $.each(unreadMessages, function(i, msg) {
+                    items.push({ title: msg.sender, message: msg.subject });
+                });
+
+                chrome.notifications.create(notificationId, {
+                    type: "list",
+                    title: unreadCount + " new messages",
+                    message: "You have " + unreadCount + " unread messages",
+                    iconUrl: iconUrl,
+                    items: items
                 }, function() {});
             }
         }

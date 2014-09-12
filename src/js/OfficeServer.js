@@ -1,6 +1,7 @@
 define(["jquery"], function($) {
     var office365Url = "https://outlook.office365.com/",
         feedUrl = office365Url + "ews/odata/Me/Inbox/",
+        newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&%24top=3",
         needsAuthentication = false;
 
     function isOffice365Url(url) {
@@ -23,7 +24,29 @@ define(["jquery"], function($) {
             },
             success: function(data) {
                 needsAuthentication = false;
-                opts.success(data.UnreadItemCount);
+
+                if(data.UnreadItemCount === 0) {
+                    opts.success(data.UnreadItemCount, []);
+                } else {
+                    $.ajax({
+                        url: newestMessagesUrl,
+                        success: function(messages) {
+                            var unreadMessages = [];
+
+                            $.each(messages.value, function(i, msg) {
+                                unreadMessages.push({ sender: msg.Sender.Name, subject: msg.Subject });
+                            });
+
+                            opts.success(data.UnreadItemCount, unreadMessages);
+                        },
+                        error: function() {
+                            opts.success(data.UnreadItemCount);
+
+                            console.log("error: ");
+                            console.dir(arguments);
+                        }
+                    });
+                }
             },
             error: opts.error
         });
