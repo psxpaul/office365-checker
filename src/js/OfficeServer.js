@@ -35,7 +35,7 @@ define(["jquery"], function($) {
 
     chrome.browserAction.onClicked.addListener(function() {
         if(needsAuthentication) {
-            chrome.tabs.create({url: feedUrl}, function(tab) {
+            chrome.tabs.create({url: feedUrl, active: true}, function(tab) {
                 chrome.tabs.executeScript(tab.id, {code: "window.close();"});
             });
         }
@@ -44,7 +44,7 @@ define(["jquery"], function($) {
             var foundTab = false;
 
             $.each(tabs, function(i, tab) {
-                if (tab.url && isOffice365Url(tab.url)) {
+                if(tab.url && isOffice365Url(tab.url)) {
                     foundTab = foundTab || (tab.url !== feedUrl);
 
                     if(!needsAuthentication) {

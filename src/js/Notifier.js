@@ -3,6 +3,10 @@ define(["jquery"], function($) {
         iconUrl = notificationImage.attr("src"),
         notificationId = "office365_checker_notification";
 
+    chrome.notifications.onClicked.addListener(function() {
+        chrome.browserAction.onClicked.dispatch();  //do the same thing as clicking on the badge when clicking the notification
+    });
+
     return {
         notify: function(unreadCount) {
             if(typeof unreadCount !== "number" || unreadCount === 0) {
