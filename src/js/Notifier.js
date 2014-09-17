@@ -9,8 +9,10 @@ define(["jquery"], function($) {
 
     return {
         notify: function(unreadCount, unreadMessages) {
+            chrome.notifications.clear(notificationId, function(){});
+
             if(typeof unreadCount !== "number" || unreadCount === 0) {
-                chrome.notifications.clear(notificationId, function(){});
+                //don't do any notification if there's no unreadCount
             } else if(typeof unreadMessages === 'undefined') {
                  chrome.notifications.create(notificationId, {
                     type: "basic",
