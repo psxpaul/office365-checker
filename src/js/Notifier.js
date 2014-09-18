@@ -1,7 +1,8 @@
 define(["jquery"], function($) {
     var notificationImage = $("#notificationImage"),
         iconUrl = notificationImage.attr("src"),
-        notificationId = "office365_checker_notification";
+        notificationId = "office365_checker_notification",
+        notificationCount = 0;
 
     chrome.notifications.onClicked.addListener(function() {
         chrome.browserAction.onClicked.dispatch();  //do the same thing as clicking on the badge when clicking the notification
@@ -9,12 +10,16 @@ define(["jquery"], function($) {
 
     return {
         notify: function(unreadCount, unreadMessages) {
-            chrome.notifications.clear(notificationId, function(){});
-
             if(typeof unreadCount !== "number" || unreadCount === 0) {
-                //don't do any notification if there's no unreadCount
+                chrome.notifications.clear(notificationId, function(){});
+                notificationCount = 0;
             } else if(typeof unreadMessages === 'undefined') {
-                 chrome.notifications.create(notificationId, {
+                if(unreadCount !== notificationCount) {
+                    chrome.notifications.clear(notificationId, function(){});
+                    notificationCount = unreadCount;
+                }
+
+                chrome.notifications.create(notificationId, {
                     type: "basic",
                     title: "New Office365 Mail",
                     message: "You have " + unreadCount + " unread messages",
@@ -25,6 +30,11 @@ define(["jquery"], function($) {
                 $.each(unreadMessages, function(i, msg) {
                     items.push({ title: msg.sender, message: msg.subject });
                 });
+
+                if(unreadCount !== notificationCount) {
+                    chrome.notifications.clear(notificationId, function(){});
+                    notificationCount = unreadCount;
+                }
 
                 chrome.notifications.create(notificationId, {
                     type: "list",
