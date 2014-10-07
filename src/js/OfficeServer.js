@@ -1,6 +1,7 @@
 define(["jquery"], function($) {
     var office365Url = "https://outlook.office365.com/",
-        feedUrl = office365Url + "ews/odata/Me/Inbox/",
+        feedUrl = office365Url + "ews/odata/Me/Folders/Inbox/",
+        unreadCountUrl = feedUrl + "Messages/$count?$filter=IsRead%20eq%20false",
         newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&%24top=3",
         needsAuthentication = false;
 
@@ -15,7 +16,7 @@ define(["jquery"], function($) {
         }
 
         $.ajax({
-            url: feedUrl,
+            url: unreadCountUrl,
             beforeSend: opts.before,
             statusCode: {
                 401: function() {
@@ -23,10 +24,13 @@ define(["jquery"], function($) {
                 }
             },
             success: function(data) {
+                var unreadCount = parseInt(data, 10);
                 needsAuthentication = false;
 
-                if(data.UnreadItemCount === 0) {
-                    opts.success(data.UnreadItemCount, []);
+                if(isNaN(unreadCount)) {
+                    opts.error();
+                } else if(unreadCount === 0) {
+                    opts.success(unreadCount, []);
                 } else {
                     $.ajax({
                         url: newestMessagesUrl,
@@ -34,13 +38,13 @@ define(["jquery"], function($) {
                             var unreadMessages = [];
 
                             $.each(messages.value, function(i, msg) {
-                                unreadMessages.push({ sender: msg.Sender.Name, subject: msg.Subject });
+                                unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
                             });
 
-                            opts.success(data.UnreadItemCount, unreadMessages);
+                            opts.success(unreadCount, unreadMessages);
                         },
                         error: function() {
-                            opts.success(data.UnreadItemCount);
+                            opts.success(unreadCount);
 
                             console.log("error: ");
                             console.dir(arguments);
@@ -54,11 +58,11 @@ define(["jquery"], function($) {
 
     chrome.webNavigation.onDOMContentLoaded.addListener(function() {
         needsAuthentication = false;
-    }, { url: [{urlEquals: feedUrl}] });
+    }, { url: [{urlEquals: unreadCountUrl}] });
 
     chrome.browserAction.onClicked.addListener(function() {
         if(needsAuthentication) {
-            chrome.tabs.create({url: feedUrl, active: true}, function(tab) {
+            chrome.tabs.create({url: unreadCountUrl, active: true}, function(tab) {
                 chrome.tabs.executeScript(tab.id, {code: "window.close();"});
             });
         }
@@ -68,7 +72,7 @@ define(["jquery"], function($) {
 
             $.each(tabs, function(i, tab) {
                 if(tab.url && isOffice365Url(tab.url)) {
-                    foundTab = foundTab || (tab.url !== feedUrl);
+                    foundTab = foundTab || (tab.url !== unreadCountUrl);
 
                     if(!needsAuthentication) {
                         chrome.tabs.update(tab.id, {active: true});
