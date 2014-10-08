@@ -29,7 +29,7 @@ define(["jquery"], function($) {
                 unreadCount = 0;
             }
 
-            if(typeof unreadMessages === 'undefined') {
+            if(typeof unreadMessages === "undefined") {
                 notificationOptions = {
                     type: "basic",
                     title: "New Office365 Mail",

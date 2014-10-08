@@ -1,2 +1,4 @@
 key.pem
 *.swp
+node_modules
+dist

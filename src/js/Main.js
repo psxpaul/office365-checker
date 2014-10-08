@@ -25,9 +25,9 @@ require(["jquery", "OfficeServer", "Badge", "Notifier"], function($, OfficeServe
     chrome.webNavigation.onDOMContentLoaded.addListener(updateInboxCount, OfficeServer.chromeUrlFilter);
     chrome.webNavigation.onReferenceFragmentUpdated.addListener(updateInboxCount, OfficeServer.chromeUrlFilter);
 
-    chrome.alarms.create('office365-checker', { periodInMinutes: 1 });
+    chrome.alarms.create("office365-checker", { periodInMinutes: 1 });
     chrome.alarms.onAlarm.addListener(function(alarm) {
-        if (alarm.name == 'office365-checker') {
+        if (alarm.name === "office365-checker") {
             updateInboxCount();
         }
     });

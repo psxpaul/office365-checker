@@ -20,7 +20,7 @@ define(["jquery"], function($) {
         doFlip = function() {
             var icon = loggedInImage[0],
                 canvas = $("canvas")[0],
-                canvasContext = canvas.getContext('2d');
+                canvasContext = canvas.getContext("2d");
 
             rotation += 1/animationFrames;
             canvasContext.save();
