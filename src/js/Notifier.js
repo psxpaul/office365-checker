@@ -2,48 +2,53 @@ define(["jquery"], function($) {
     var notificationImage = $("#notificationImage"),
         iconUrl = notificationImage.attr("src"),
         notificationId = "office365_checker_notification",
-        notificationCount = 0;
+        oldNotificationCount = 0;
 
     chrome.notifications.onClicked.addListener(function() {
         chrome.browserAction.onClicked.dispatch();  //do the same thing as clicking on the badge when clicking the notification
     });
 
+    function updateNotification(unreadCount, notificationOptions) {
+        if(unreadCount === 0) {
+            chrome.notifications.clear(notificationId, $.noop);
+        } else if(unreadCount > oldNotificationCount) {
+            chrome.notifications.clear(notificationId, $.noop);
+            chrome.notifications.create(notificationId, notificationOptions, $.noop);
+        } else {
+            chrome.notifications.update(notificationId, notificationOptions, $.noop);
+        }
+
+        oldNotificationCount = unreadCount;
+    }
+
     return {
         notify: function(unreadCount, unreadMessages) {
-            if(typeof unreadCount !== "number" || unreadCount === 0) {
-                chrome.notifications.clear(notificationId, function(){});
-                notificationCount = 0;
-            } else if(typeof unreadMessages === 'undefined') {
-                if(unreadCount !== notificationCount) {
-                    chrome.notifications.clear(notificationId, function(){});
-                    notificationCount = unreadCount;
-                }
+            var notificationOptions = {};
 
-                chrome.notifications.create(notificationId, {
+            if(typeof unreadCount !== "number" || isNaN(unreadCount)) {
+                unreadCount = 0;
+            }
+
+            if(typeof unreadMessages === 'undefined') {
+                notificationOptions = {
                     type: "basic",
                     title: "New Office365 Mail",
                     message: "You have " + unreadCount + " unread messages",
                     iconUrl: iconUrl
-                }, function() {});
+                };
             } else {
-                var items = [];
-                $.each(unreadMessages, function(i, msg) {
-                    items.push({ title: msg.sender, message: msg.subject });
-                });
-
-                if(unreadCount !== notificationCount) {
-                    chrome.notifications.clear(notificationId, function(){});
-                    notificationCount = unreadCount;
-                }
-
-                chrome.notifications.create(notificationId, {
+                notificationOptions = {
                     type: "list",
                     title: unreadCount + " new messages",
                     message: "You have " + unreadCount + " unread messages",
                     iconUrl: iconUrl,
-                    items: items
-                }, function() {});
+                    items: $.map(unreadMessages, function(msg, i) {
+                        return { title: msg.sender, message: msg.subject };
+                    })
+                };
             }
+
+            updateNotification(unreadCount, notificationOptions);
         }
     };
 });
