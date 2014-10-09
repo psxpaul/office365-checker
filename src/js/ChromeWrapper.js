@@ -39,8 +39,8 @@ define([], function() {
             chrome.webNavigation.onReferenceFragmentUpdated.addListener(callback, pattern);
         },
 
-        createAlarm: function(callback) {
-            chrome.alarms.create(callback);
+        createAlarm: function(name, opts) {
+            chrome.alarms.create(name, opts);
         },
         onAlarm: function(callback) {
             chrome.alarms.onAlarm.addListener(callback);
