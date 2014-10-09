@@ -35,7 +35,7 @@ module.exports = function(grunt) {
                 indent: 4,
                 latedef: true,
                 maxdepth: 3,
-                maxparams: 4,
+                maxparams: 5,
                 newcap: true,
                 noempty: true,
                 nonbsp: true,
@@ -49,7 +49,6 @@ module.exports = function(grunt) {
                 browser: true,
                 globals: {
                     assert: true,
-                    chrome: true,
                     console: true,
                     define: true,
                     describe: true,
@@ -66,7 +65,6 @@ module.exports = function(grunt) {
                 deps: [
                     "src/js/RequireConfig.js",
                     "src/js/lib/require-2.1.14.min.js",
-                    "test/js/util/mockChrome.js",
                     "test/js/util/testBootstrapper.js"
                 ],
                 log: true,

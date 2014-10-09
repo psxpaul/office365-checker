@@ -1,4 +1,4 @@
-define(["jquery"], function($) {
+define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var loggedInImage = $("#loggedInImage"),
         notLoggedInImage = $("#notLoggedInImage"),
         oldUnreadCount,
@@ -6,8 +6,8 @@ define(["jquery"], function($) {
         loadingFrames = [".   ", " .  ", "  . ", "   ."];
 
     function paintLoadingFrame() {
-        chrome.browserAction.setBadgeBackgroundColor({color:[255, 140, 0, 255]});
-        chrome.browserAction.setBadgeText({text:loadingFrames[0]});
+        ChromeWrapper.setBadgeBgColor({color:[255, 140, 0, 255]});
+        ChromeWrapper.setBadgeText({text:loadingFrames[0]});
         loadingFrames.push(loadingFrames.shift());
     }
 
@@ -30,7 +30,7 @@ define(["jquery"], function($) {
             canvasContext.drawImage(icon, -Math.ceil(canvas.width / 2), -Math.ceil(canvas.height / 2));
             canvasContext.restore();
 
-            chrome.browserAction.setIcon({imageData: canvasContext.getImageData(0, 0, canvas.width, canvas.height)});
+            ChromeWrapper.setBadgeIcon({imageData: canvasContext.getImageData(0, 0, canvas.width, canvas.height)});
 
             if (rotation <= 1) {
                 setTimeout(doFlip, animationSpeed);
@@ -54,15 +54,15 @@ define(["jquery"], function($) {
         },
         setUnreadCount: function(unreadCount) {
             if (typeof unreadCount === "number") {
-                chrome.browserAction.setIcon({path: loggedInImage.attr("src")});
-                chrome.browserAction.setBadgeBackgroundColor({color:[255, 140, 0, 255]});
-                chrome.browserAction.setBadgeText({
+                ChromeWrapper.setBadgeIcon({path: loggedInImage.attr("src")});
+                ChromeWrapper.setBadgeBgColor({color:[255, 140, 0, 255]});
+                ChromeWrapper.setBadgeText({
                     text: unreadCount === 0 ? "" : unreadCount.toString()
                 });
             } else {
-                chrome.browserAction.setIcon({path: notLoggedInImage.attr("src")});
-                chrome.browserAction.setBadgeBackgroundColor({color:[190, 190, 190, 230]});
-                chrome.browserAction.setBadgeText({text:"?"});
+                ChromeWrapper.setBadgeIcon({path: notLoggedInImage.attr("src")});
+                ChromeWrapper.setBadgeBgColor({color:[190, 190, 190, 230]});
+                ChromeWrapper.setBadgeText({text:"?"});
             }
 
             if(oldUnreadCount !== unreadCount) {

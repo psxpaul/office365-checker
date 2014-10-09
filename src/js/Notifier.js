@@ -1,21 +1,19 @@
-define(["jquery"], function($) {
+define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var notificationImage = $("#notificationImage"),
         iconUrl = notificationImage.attr("src"),
         notificationId = "office365_checker_notification",
         oldNotificationCount = 0;
 
-    chrome.notifications.onClicked.addListener(function() {
-        chrome.browserAction.onClicked.dispatch();  //do the same thing as clicking on the badge when clicking the notification
-    });
+    ChromeWrapper.onNotificationClick(ChromeWrapper.browserActionClick);
 
     function updateNotification(unreadCount, notificationOptions) {
         if(unreadCount === 0) {
-            chrome.notifications.clear(notificationId, $.noop);
+            ChromeWrapper.clearNotification(notificationId, $.noop);
         } else if(unreadCount > oldNotificationCount) {
-            chrome.notifications.clear(notificationId, $.noop);
-            chrome.notifications.create(notificationId, notificationOptions, $.noop);
+            ChromeWrapper.clearNotification(notificationId, $.noop);
+            ChromeWrapper.createNotification(notificationId, notificationOptions, $.noop);
         } else {
-            chrome.notifications.update(notificationId, notificationOptions, $.noop);
+            ChromeWrapper.updateNotification(notificationId, notificationOptions, $.noop);
         }
 
         oldNotificationCount = unreadCount;

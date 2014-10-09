@@ -1,4 +1,4 @@
-define(["jquery"], function($) {
+define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var office365Url = "https://outlook.office365.com/",
         feedUrl = office365Url + "ews/odata/Me/Folders/Inbox/",
         unreadCountUrl = feedUrl + "Messages/$count?$filter=IsRead%20eq%20false",
@@ -56,18 +56,18 @@ define(["jquery"], function($) {
         });
     }
 
-    chrome.webNavigation.onDOMContentLoaded.addListener(function() {
+    ChromeWrapper.onDOMContentLoaded(function() {
         needsAuthentication = false;
     }, { url: [{urlEquals: unreadCountUrl}] });
 
-    chrome.browserAction.onClicked.addListener(function() {
+    ChromeWrapper.onBrowserActionClick(function() {
         if(needsAuthentication) {
-            chrome.tabs.create({url: unreadCountUrl, active: true}, function(tab) {
-                chrome.tabs.executeScript(tab.id, {code: "window.close();"});
+            ChromeWrapper.createTab({url: unreadCountUrl, active: true}, function(tab) {
+                ChromeWrapper.executeInTab(tab.id, {code: "window.close();"});
             });
         }
 
-        chrome.tabs.getAllInWindow(undefined, function(tabs) {
+        ChromeWrapper.getAllTabs(undefined, function(tabs) {
             var foundTab = false;
 
             $.each(tabs, function(i, tab) {
@@ -75,14 +75,14 @@ define(["jquery"], function($) {
                     foundTab = foundTab || (tab.url !== unreadCountUrl);
 
                     if(!needsAuthentication) {
-                        chrome.tabs.update(tab.id, {active: true});
+                        ChromeWrapper.updateTab(tab.id, {active: true});
                         foundTab = true;
                     }
                 }
             });
 
             if(!foundTab) {
-                chrome.tabs.create({url: office365Url, active: !needsAuthentication});
+                ChromeWrapper.createTab({url: office365Url, active: !needsAuthentication});
             }
         });
     });

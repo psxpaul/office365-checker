@@ -1,4 +1,4 @@
-require(["jquery", "OfficeServer", "Badge", "Notifier"], function($, OfficeServer, Badge, Notifier) {
+require(["jquery", "OfficeServer", "Badge", "Notifier", "ChromeWrapper"], function($, OfficeServer, Badge, Notifier, ChromeWrapper) {
     console.log(new Date().toLocaleTimeString() + " - loading everything!");
 
     function updateInboxCount() {
@@ -22,16 +22,16 @@ require(["jquery", "OfficeServer", "Badge", "Notifier"], function($, OfficeServe
         });
     }
 
-    chrome.webNavigation.onDOMContentLoaded.addListener(updateInboxCount, OfficeServer.chromeUrlFilter);
-    chrome.webNavigation.onReferenceFragmentUpdated.addListener(updateInboxCount, OfficeServer.chromeUrlFilter);
+    ChromeWrapper.onDOMContentLoaded(updateInboxCount, OfficeServer.chromeUrlFilter);
+    ChromeWrapper.onReferenceFragmentUpdated(updateInboxCount, OfficeServer.chromeUrlFilter);
 
-    chrome.alarms.create("office365-checker", { periodInMinutes: 1 });
-    chrome.alarms.onAlarm.addListener(function(alarm) {
+    ChromeWrapper.createAlarm("office365-checker", { periodInMinutes: 1 });
+    ChromeWrapper.onAlarm(function(alarm) {
         if (alarm.name === "office365-checker") {
             updateInboxCount();
         }
     });
 
     updateInboxCount();
-    chrome.browserAction.onClicked.addListener(updateInboxCount);
+    ChromeWrapper.onBrowserActionClick(updateInboxCount);
 });
