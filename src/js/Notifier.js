@@ -20,6 +20,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     }
 
     return {
+        notificationId: notificationId,
         notify: function(unreadCount, unreadMessages) {
             var notificationOptions = {};
 

@@ -22,6 +22,7 @@ module.exports = function(grunt) {
                 "src/**/*.js",
                 "!src/js/lib/*.js",
                 "test/**/*.js",
+                "!test/js/util/Squire-0.2.0.js",
             ],
             options: {
                 bitwise: true,
@@ -48,13 +49,16 @@ module.exports = function(grunt) {
 
                 browser: true,
                 globals: {
+                    afterEach: true,
                     assert: true,
+                    beforeEach: true,
                     console: true,
                     define: true,
                     describe: true,
                     it: true,
                     mocha: true,
-                    require: true
+                    require: true,
+                    sinon: true
                 }
             }
         },
