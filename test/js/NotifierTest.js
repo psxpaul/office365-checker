@@ -1,142 +1,119 @@
-define(["ChromeWrapper", "Squire", "jquery"], function(RealChromeWrapper, Squire, $) {
+define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $) {
     var injector = new Squire(),
-        mockChromeWrapper = sinon.stub(RealChromeWrapper),
+        mockChromeWrapper = sinon.stub(ChromeWrapper),
         msg1 = { sender: "Joe", subject: "Message 1" },
         msg2 = { sender: "Sally", subject: "Message 2" },
         msg3 = { sender: "Jeff", subject: "Message 3" };
 
     injector.mock("ChromeWrapper", mockChromeWrapper);
-    //window.mockChromeWrapper = mockChromeWrapper;
+    $("<img id='notificationImage' src='testIcon.png' style='display:none'></img>").appendTo("body");
 
-    beforeEach(injector.run(["Notifier"], function(Notifier) {
-        Notifier.notify(0);
-        mockChromeWrapper.clearNotification.reset();
-        mockChromeWrapper.updateNotification.reset();
-        mockChromeWrapper.createNotification.reset();
-    }));
+    describe("NotifierTest", function() {
+        function assertCallCount(clear, update, create) {
+            assert.equal(mockChromeWrapper.clearNotification.callCount, clear);
+            assert.equal(mockChromeWrapper.updateNotification.callCount, update);
+            assert.equal(mockChromeWrapper.createNotification.callCount, create);
+        }
 
-    it("links notification clicks to browserAction clicks", injector.run(["Notifier"], function(Notifier) {
-        assert.equal(mockChromeWrapper.onNotificationClick.callCount, 1);
-        assert.isTrue(mockChromeWrapper.onNotificationClick.calledWith(mockChromeWrapper.browserActionClick));
-    }));
+        beforeEach(injector.run(["Notifier"], function(Notifier) {
+            Notifier.notify(0);
+            mockChromeWrapper.clearNotification.reset();
+            mockChromeWrapper.updateNotification.reset();
+            mockChromeWrapper.createNotification.reset();
+            assertCallCount(0, 0, 0);
+        }));
 
-    it("non-numbers clear notifications", injector.run(["Notifier"], function(Notifier) {
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
+        it("links notification clicks to browserAction clicks", injector.run(["Notifier"], function(Notifier) {
+            assert.equal(mockChromeWrapper.onNotificationClick.callCount, 1);
+            assert.isTrue(mockChromeWrapper.onNotificationClick.calledWith(mockChromeWrapper.browserActionClick));
+        }));
 
-        Notifier.notify("");
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(0).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
+        it("non-numbers clear notifications", injector.run(["Notifier"], function(Notifier) {
+            assertCallCount(0, 0, 0);
 
-        Notifier.notify("asdf");
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(1).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
+            Notifier.notify("");
+            assertCallCount(1, 0, 0);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
 
-        Notifier.notify("123");
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 3);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(2).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
+            Notifier.notify("asdf");
+            assertCallCount(2, 0, 0);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
 
-        Notifier.notify(parseInt("s123", 10));
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 4);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(3).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
-    }));
+            Notifier.notify("123");
+            assertCallCount(3, 0, 0);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
 
-    it("unreadCount without unreadMessages", injector.run(["Notifier"], function(Notifier) {
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
+            Notifier.notify(parseInt("s123", 10));
+            assertCallCount(4, 0, 0);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
+        }));
 
-        Notifier.notify(123);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(0).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.createNotification.getCall(0).calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 123 unread messages" }));
+        it("unreadCount without unreadMessages", injector.run(["Notifier"], function(Notifier) {
+            assertCallCount(0, 0, 0);
 
-        Notifier.notify(123);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.updateNotification.getCall(0).calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 123 unread messages" }));
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
+            Notifier.notify(123);
+            assertCallCount(1, 0, 1);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
+            assert.isTrue(mockChromeWrapper.createNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", iconUrl: "testIcon.png", title: "New Office365 Mail", message: "You have 123 unread messages" }));
 
-        Notifier.notify(123);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.updateNotification.getCall(1).calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 123 unread messages" }));
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
+            Notifier.notify(123);
+            assertCallCount(1, 1, 1);
+            assert.isTrue(mockChromeWrapper.updateNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 123 unread messages" }));
 
-        Notifier.notify(120);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 3);
-        assert.isTrue(mockChromeWrapper.updateNotification.getCall(2).calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 120 unread messages" }));
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
+            Notifier.notify(123);
+            assertCallCount(1, 2, 1);
+            assert.isTrue(mockChromeWrapper.updateNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 123 unread messages" }));
 
-        Notifier.notify(125);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(1).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 3);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.createNotification.getCall(1).calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 125 unread messages" }));
-    }));
+            Notifier.notify(120);
+            assertCallCount(1, 3, 1);
+            assert.isTrue(mockChromeWrapper.updateNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 120 unread messages" }));
 
-    it("unreadCount with unreadMessages", injector.run(["Notifier"], function(Notifier) {
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 0);
+            Notifier.notify(125);
+            assertCallCount(2, 3, 2);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
+            assert.isTrue(mockChromeWrapper.createNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", title: "New Office365 Mail", message: "You have 125 unread messages" }));
+        }));
 
-        Notifier.notify(3, [msg1, msg2, msg3]);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(0).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 0);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.createNotification.getCall(0).calledWithMatch(Notifier.notificationId, {
-                    type: "list",
-                    title: "3 new messages",
-                    message: "You have 3 unread messages",
-                    items: [{title: "Joe", message: "Message 1"}, {title: "Sally", message: "Message 2"}, {title: "Jeff", message: "Message 3"}]
-                }));
+        it("unreadCount with unreadMessages", injector.run(["Notifier"], function(Notifier) {
+            assertCallCount(0, 0, 0);
 
-        Notifier.notify(3, [msg1, msg2, msg3]);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 1);
-        assert.isTrue(mockChromeWrapper.updateNotification.getCall(0).calledWithMatch(Notifier.notificationId, {
-                    type: "list",
-                    title: "3 new messages",
-                    message: "You have 3 unread messages",
-                    items: [{title: "Joe", message: "Message 1"}, {title: "Sally", message: "Message 2"}, {title: "Jeff", message: "Message 3"}]
-                }));
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
+            Notifier.notify(3, [msg1, msg2, msg3]);
+            assertCallCount(1, 0, 1);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
+            assert.isTrue(mockChromeWrapper.createNotification.lastCall.calledWithMatch(Notifier.notificationId, {
+                        type: "list",
+                        title: "3 new messages",
+                        message: "You have 3 unread messages",
+                        items: [{title: "Joe", message: "Message 1"}, {title: "Sally", message: "Message 2"}, {title: "Jeff", message: "Message 3"}]
+                    }));
 
-        Notifier.notify(2, [msg1, msg3]);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 1);
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.updateNotification.getCall(1).calledWithMatch(Notifier.notificationId, {
-                    type: "list",
-                    title: "2 new messages",
-                    message: "You have 2 unread messages",
-                    items: [{title: "Joe", message: "Message 1"}, {title: "Jeff", message: "Message 3"}]
-                }));
-        assert.equal(mockChromeWrapper.createNotification.callCount, 1);
+            Notifier.notify(3, [msg1, msg2, msg3]);
+            assertCallCount(1, 1, 1);
+            assert.isTrue(mockChromeWrapper.updateNotification.lastCall.calledWithMatch(Notifier.notificationId, {
+                        type: "list",
+                        title: "3 new messages",
+                        message: "You have 3 unread messages",
+                        items: [{title: "Joe", message: "Message 1"}, {title: "Sally", message: "Message 2"}, {title: "Jeff", message: "Message 3"}]
+                    }));
 
-        Notifier.notify(3, [msg1, msg2, msg3]);
-        assert.equal(mockChromeWrapper.clearNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.clearNotification.getCall(1).calledWithMatch(Notifier.notificationId));
-        assert.equal(mockChromeWrapper.updateNotification.callCount, 2);
-        assert.equal(mockChromeWrapper.createNotification.callCount, 2);
-        assert.isTrue(mockChromeWrapper.createNotification.getCall(1).calledWithMatch(Notifier.notificationId, {
-                    type: "list",
-                    title: "3 new messages",
-                    message: "You have 3 unread messages",
-                    items: [{title: "Joe", message: "Message 1"}, {title: "Sally", message: "Message 2"}, {title: "Jeff", message: "Message 3"}]
-                }));
-    }));
+            Notifier.notify(2, [msg1, msg3]);
+            assertCallCount(1, 2, 1);
+            assert.isTrue(mockChromeWrapper.updateNotification.lastCall.calledWithMatch(Notifier.notificationId, {
+                        type: "list",
+                        title: "2 new messages",
+                        message: "You have 2 unread messages",
+                        items: [{title: "Joe", message: "Message 1"}, {title: "Jeff", message: "Message 3"}]
+                    }));
+
+            Notifier.notify(3, [msg1, msg2, msg3]);
+            assertCallCount(2, 2, 2);
+            assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
+            assert.isTrue(mockChromeWrapper.createNotification.lastCall.calledWithMatch(Notifier.notificationId, {
+                        type: "list",
+                        title: "3 new messages",
+                        message: "You have 3 unread messages",
+                        items: [{title: "Joe", message: "Message 1"}, {title: "Sally", message: "Message 2"}, {title: "Jeff", message: "Message 3"}]
+                    }));
+        }));
+    });
 });

@@ -49,8 +49,10 @@ module.exports = function(grunt) {
 
                 browser: true,
                 globals: {
+                    after: true,
                     afterEach: true,
                     assert: true,
+                    before: true,
                     beforeEach: true,
                     console: true,
                     define: true,
