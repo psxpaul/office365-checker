@@ -36,7 +36,7 @@ module.exports = function(grunt) {
                 indent: 4,
                 latedef: true,
                 maxdepth: 3,
-                maxparams: 5,
+                //maxparams: 5,
                 newcap: true,
                 noempty: true,
                 nonbsp: true,
@@ -80,7 +80,7 @@ module.exports = function(grunt) {
 
         watch: {
             files: ["<%= jshint.files %>"],
-            tasks: ["jshint"]
+            tasks: ["jshint", "js-test"]
         }
     });
 

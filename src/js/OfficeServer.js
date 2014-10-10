@@ -15,6 +15,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             return;
         }
 
+        $.support.cors = true;
         $.ajax({
             url: unreadCountUrl,
             beforeSend: opts.before,
@@ -88,6 +89,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     });
 
     return {
+        office365Url: office365Url,
+        unreadCountUrl: unreadCountUrl,
         getUnreadCount: getUnreadCount,
         chromeUrlFilter: { url: [{urlContains: office365Url}] }
     };
