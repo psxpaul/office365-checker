@@ -5,6 +5,8 @@ module.exports = function(grunt) {
         distFolder: "dist",
         pkg: grunt.file.readJSON("package.json"),
 
+        clean: ["<%= distFolder %>"],
+
         compress: {
             main: {
                 options: {
@@ -74,6 +76,8 @@ module.exports = function(grunt) {
                     "test/js/util/testBootstrapper.js"
                 ],
                 log: true,
+                coverage: true,
+                coverageReportDirectory: "<%= distFolder %>",
                 requirejs: true
             }
         },
@@ -84,11 +88,12 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-js-test");
 
     grunt.registerTask("test", ["jshint", "js-test"]);
-    grunt.registerTask("default", ["jshint", "js-test", "compress"]);
+    grunt.registerTask("default", ["clean", "jshint", "js-test", "compress"]);
 };

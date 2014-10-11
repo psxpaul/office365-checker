@@ -6,7 +6,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
     injector.mock("ChromeWrapper", mockChromeWrapper);
 
-    describe("NotifierTest", function() {
+    describe("OfficeServerTest", function() {
         var server, requests;
 
         function assertCallCounts(domLoaded, actionClick, createTab, updateTab, getAllTabs, executeInTab) {
@@ -98,7 +98,6 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             //getUnreadCount returns a 401 (needs authentication)
             assert.lengthOf(requests, 0);
             OfficeServer.getUnreadCount({ before: before, error: error, success: success });
-            console.dir(JSON.stringify(requests));
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [401, {}, ""]);
             server.respond();
