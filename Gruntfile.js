@@ -76,8 +76,9 @@ module.exports = function(grunt) {
                     "test/js/util/testBootstrapper.js"
                 ],
                 log: true,
-                coverage: true,
+                coverage: false,
                 coverageReportDirectory: "<%= distFolder %>",
+                identifier: "coverage",
                 requirejs: true
             }
         },

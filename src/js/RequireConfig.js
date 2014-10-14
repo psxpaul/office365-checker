@@ -13,6 +13,7 @@
         }
     };
 
+    /* istanbul ignore else */
     if(typeof require === "undefined") {
         require = requireConfig;
     } else {

@@ -6,7 +6,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
         msg3 = { sender: "Jeff", subject: "Message 3" };
 
     injector.mock("ChromeWrapper", mockChromeWrapper);
-    $("<img id='notificationImage' src='testIcon.png' style='display:none'></img>").appendTo("body");
+    $("<img id='notificationImage' src='src/images/office365_128.png' style='display:none'></img>").appendTo("body");
 
     describe("NotifierTest", function() {
         function assertCallCount(clear, update, create) {
@@ -54,7 +54,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             Notifier.notify(123);
             assertCallCount(1, 0, 1);
             assert.isTrue(mockChromeWrapper.clearNotification.lastCall.calledWithMatch(Notifier.notificationId));
-            assert.isTrue(mockChromeWrapper.createNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", iconUrl: "testIcon.png", title: "New Office365 Mail", message: "You have 123 unread messages" }));
+            assert.isTrue(mockChromeWrapper.createNotification.lastCall.calledWithMatch(Notifier.notificationId, { type: "basic", iconUrl: "src/images/office365_128.png", title: "New Office365 Mail", message: "You have 123 unread messages" }));
 
             Notifier.notify(123);
             assertCallCount(1, 1, 1);

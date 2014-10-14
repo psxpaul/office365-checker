@@ -90,6 +90,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
 
     return {
         office365Url: office365Url,
+        newestMessagesUrl: newestMessagesUrl,
         unreadCountUrl: unreadCountUrl,
         getUnreadCount: getUnreadCount,
         chromeUrlFilter: { url: [{urlContains: office365Url}] }

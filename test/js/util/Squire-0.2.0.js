@@ -1,3 +1,5 @@
+/* istanbul ignore next */
+
 define(function() {
   
   /**

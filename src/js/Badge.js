@@ -37,6 +37,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                 ChromeWrapper.setBadgeIcon({imageData: canvasContext.getImageData(0, 0, canvas.width, canvas.height)});
             } catch(e) {
                 //console.dir(e);
+                ChromeWrapper.setBadgeIcon({path: notLoggedInImage.attr("src")});
             }
 
             if (rotation <= 1) {

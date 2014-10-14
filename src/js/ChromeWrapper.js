@@ -1,4 +1,5 @@
 /* global chrome */
+/* istanbul ignore next */
 
 define([], function() {
     return {
