@@ -13,7 +13,8 @@ module.exports = function(grunt) {
                     archive: "<%= distFolder %>/<%= pkg.name %>.zip"
                 },
                 files: [
-                    { src: ["_locales/**", "src/**", "key.pem", "LICENSE", "manifest.json", "README.md"] }
+                    { src: ["_locales/**", "src/**", "key.pem", "LICENSE", "README.md"] },
+                    { src: ["manifest.json"], cwd: "<%= distFolder %>/", expand: true }
                 ]
             }
         },
@@ -95,6 +96,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-js-test");
 
+    grunt.registerTask("manifest", function() {
+        var manifest = grunt.file.readJSON("manifest_template.json"),
+            distFolder = grunt.config("distFolder"),
+            dest = distFolder + "/manifest.json";
+
+        manifest.version = grunt.config("pkg.version");
+        grunt.file.write(dest, JSON.stringify(manifest, null, 4));
+    });
+
     grunt.registerTask("test", ["jshint", "js-test"]);
-    grunt.registerTask("default", ["clean", "jshint", "js-test", "compress"]);
+    grunt.registerTask("default", ["clean", "jshint", "js-test", "manifest", "compress"]);
 };
