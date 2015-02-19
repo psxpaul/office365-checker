@@ -19,6 +19,15 @@ module.exports = function(grunt) {
             }
         },
 
+        copy: {
+            main: {
+                files: [
+                    {expand: true, src: ["_locales/**", "src/**", "<%= distFolder %>/manifest.json"], dest: "<%= distFolder %>/unpacked"},
+                    {expand: true, flatten: true, src: ["<%= distFolder %>/manifest.json"], dest: "<%= distFolder %>/unpacked"},
+                ]
+            }
+        },
+
         jshint: {
             files: [
                 "Gruntfile.js",
@@ -86,12 +95,13 @@ module.exports = function(grunt) {
 
         watch: {
             files: ["<%= jshint.files %>"],
-            tasks: ["jshint", "js-test"]
+            tasks: ["jshint", "js-test", "manifest", "copy"]
         }
     });
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-compress");
+    grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-js-test");
