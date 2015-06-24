@@ -13,11 +13,17 @@
     },
     "manifest_version": 2,
     "name": "__MSG_office365check_name__",
+    "options_page": "src/html/OptionsPage.html",
+    "options_ui": {
+        "page": "src/html/OptionsPage.html",
+        "chrome_style": true
+    },
     "permissions": [
-        "tabs",
         "alarms",
-        "webNavigation",
         "notifications",
+        "storage",
+        "tabs",
+        "webNavigation",
         "*://*.office365.com/",
         "*://*.outlook.com/"
     ],

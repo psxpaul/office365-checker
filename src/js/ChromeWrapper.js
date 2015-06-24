@@ -1,7 +1,7 @@
 /* global chrome */
 /* istanbul ignore next */
 
-define([], function() {
+define(["jquery"], function($) {
     return {
         onNotificationClick: function(callback) {
             chrome.notifications.onClicked.addListener(callback);
@@ -40,6 +40,9 @@ define([], function() {
             chrome.webNavigation.onReferenceFragmentUpdated.addListener(callback, pattern);
         },
 
+        clearAlarm: function(name) {
+            chrome.alarms.clear(name);
+        },
         createAlarm: function(name, opts) {
             chrome.alarms.create(name, opts);
         },
@@ -47,12 +50,24 @@ define([], function() {
             chrome.alarms.onAlarm.addListener(callback);
         },
 
+        getFromStorage: function(key, callback) {
+            chrome.storage.sync.get(key, function(data) {
+              callback(data[key]);
+            });
+        },
+        setInStorage: function(key, value) {
+            var args = {};
+            args[key] = value;
+            chrome.storage.sync.set(args, $.noop);
+        },
 
         createTab: function(opts, callback) {
             chrome.tabs.create(opts, callback);
         },
         updateTab: function(id, opts) { chrome.tabs.update(id, opts); },
         executeInTab: function(id, opts) { chrome.tabs.executeScript(id, opts); },
-        getAllTabs: function(id, callback) { chrome.tabs.getAllInWindow(id,callback); }
+        getAllTabs: function(id, callback) { chrome.tabs.getAllInWindow(id,callback); },
+
+        getMessage: function(id) { return chrome.i18n.getMessage(id); }
     };
 });

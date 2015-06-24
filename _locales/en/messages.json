@@ -10,6 +10,12 @@
             }
         }
     },
+    "office365check_refreshIntervalLabel": {
+        "message": "Refresh Interval"
+    },
+    "office365check_refreshIntervalUnits": {
+        "message": "minutes"
+    },
     "office365check_name": {
         "message": "Office365 Mail Checker"
     },
