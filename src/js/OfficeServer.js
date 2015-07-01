@@ -1,8 +1,7 @@
 define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var office365Url = "https://outlook.office365.com/",
-        feedUrl = office365Url + "ews/odata/Me/Folders/Inbox/",
-        unreadCountUrl = feedUrl + "Messages/$count?$filter=IsRead%20eq%20false",
-        newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&%24top=3",
+        feedUrl = office365Url + "api/v1.0/Me/Folders/Inbox/",
+        unreadCountUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$select=IsRead,Sender,Subject",
         needsAuthentication = false;
 
     function isOffice365Url(url) {
@@ -25,33 +24,17 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                 }
             },
             success: function(data) {
-                var unreadCount = parseInt(data, 10);
+                var unreadCount = 0;
+	            var unreadMessages = [];
                 needsAuthentication = false;
 
-                if(isNaN(unreadCount)) {
-                    opts.error();
-                } else if(unreadCount === 0) {
-                    opts.success(unreadCount, []);
-                } else {
-                    $.ajax({
-                        url: newestMessagesUrl,
-                        success: function(messages) {
-                            var unreadMessages = [];
-
-                            $.each(messages.value, function(i, msg) {
-                                unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
-                            });
-
-                            opts.success(unreadCount, unreadMessages);
-                        },
-                        error: function() {
-                            opts.success(unreadCount);
-
-                            console.log("error: ");
-                            console.dir(arguments);
-                        }
-                    });
-                }
+	            $.each(data.value, function(i, msg) {
+		            if (!msg.IsRead) {
+			            ++unreadCount;
+			            unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
+		            }
+	            });
+	            opts.success(unreadCount, unreadMessages);
             },
             error: opts.error
         });
@@ -90,7 +73,6 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
 
     return {
         office365Url: office365Url,
-        newestMessagesUrl: newestMessagesUrl,
         unreadCountUrl: unreadCountUrl,
         getUnreadCount: getUnreadCount,
         chromeUrlFilter: { url: [{urlContains: office365Url}] }
