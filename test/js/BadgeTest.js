@@ -28,44 +28,44 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             assertCallCount(0, 0, 0);
             clock.tick(100);
             assertCallCount(1, 0, 1);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: ".   "}));
 
             clock.tick(100);
             assertCallCount(2, 0, 2);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: " .  "}));
 
             clock.tick(100);
             assertCallCount(3, 0, 3);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "  . "}));
 
             clock.tick(100);
             assertCallCount(4, 0, 4);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "   ."}));
 
             Badge.startLoadingAnimation();
             clock.tick(100);
             assertCallCount(5, 0, 5);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: ".   "}));
 
             clock.tick(100);
             assertCallCount(6, 0, 6);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: " .  "}));
 
             Badge.startLoadingAnimation();
             clock.tick(100);
             assertCallCount(7, 0, 7);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "  . "}));
 
             clock.tick(100);
             assertCallCount(8, 0, 8);
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}));
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "   ."}));
 
             Badge.stopLoadingAnimation();
@@ -97,7 +97,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             Badge.setUnreadCount(3);
             assertCallCount(1, 2, 1);
 
-            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[255, 140, 0, 255]}), "badgeBgColor not called correctly");
+            assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}), "badgeBgColor not called correctly");
             assert.isTrue(mockChromeWrapper.setBadgeIcon.getCall(0).calledWithMatch({path: "src/images/office365_logged_in.png"}), "badgeIcon not called correctly(0)");
             //assert.isTrue(mockChromeWrapper.setBadgeIcon.getCall(1).calledWithMatch({imageData: {}}) , "badgeIcon not called correctly(1)");
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "3"}), "four");

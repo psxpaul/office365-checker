@@ -6,7 +6,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         loadingFrames = [".   ", " .  ", "  . ", "   ."];
 
     function paintLoadingFrame() {
-        ChromeWrapper.setBadgeBgColor({color:[255, 140, 0, 255]});
+        ChromeWrapper.setBadgeBgColor({color:[0, 113, 197, 255]});
         ChromeWrapper.setBadgeText({text:loadingFrames[0]});
         loadingFrames.push(loadingFrames.shift());
     }
@@ -63,7 +63,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         setUnreadCount: function(unreadCount) {
             if (typeof unreadCount === "number") {
                 ChromeWrapper.setBadgeIcon({path: loggedInImage.attr("src")});
-                ChromeWrapper.setBadgeBgColor({color:[255, 140, 0, 255]});
+                ChromeWrapper.setBadgeBgColor({color:[0, 113, 197, 255]});
                 ChromeWrapper.setBadgeText({
                     text: unreadCount === 0 ? "" : unreadCount.toString()
                 });
