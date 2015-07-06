@@ -1,7 +1,8 @@
 define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var office365Url = "https://outlook.office365.com/",
         feedUrl = office365Url + "api/v1.0/Me/Folders/Inbox/",
-        unreadCountUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$select=IsRead,Sender,Subject",
+        unreadCountUrl = feedUrl + "Messages?$count=true&$filter=IsRead%20eq%20false",
+        newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$top=3&$select=IsRead,Sender,Subject",
         needsAuthentication = false;
 
     function isOffice365Url(url) {
@@ -24,17 +25,34 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                 }
             },
             success: function(data) {
-                var unreadCount = 0;
-                var unreadMessages = [];
+                var unreadCountText = typeof data["@odata.count"] !== "undefined" ? data["@odata.count"] : "NaN";
+                var unreadCount = parseInt(unreadCountText, 10);
                 needsAuthentication = false;
 
-                $.each(data.value, function(i, msg) {
-                    if (!msg.IsRead) {
-                        unreadCount = unreadCount + 1;
-                        unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
-                    }
-                });
-                opts.success(unreadCount, unreadMessages);
+                if(isNaN(unreadCount)) {
+                    opts.error();
+                } else if(unreadCount === 0) {
+                    opts.success(unreadCount, []);
+                } else {
+                    $.ajax({
+                        url: newestMessagesUrl,
+                        success: function(messages) {
+                            var unreadMessages = [];
+
+                            $.each(messages.value, function(i, msg) {
+                                unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
+                            });
+
+                            opts.success(unreadCount, unreadMessages);
+                        },
+                        error: function() {
+                            opts.success(unreadCount);
+
+                            console.log("error: ");
+                            console.dir(arguments);
+                        }
+                    });
+                }
             },
             error: opts.error
         });
