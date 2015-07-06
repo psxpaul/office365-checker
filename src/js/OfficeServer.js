@@ -25,16 +25,16 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             },
             success: function(data) {
                 var unreadCount = 0;
-	            var unreadMessages = [];
+                var unreadMessages = [];
                 needsAuthentication = false;
 
-	            $.each(data.value, function(i, msg) {
-		            if (!msg.IsRead) {
-			            ++unreadCount;
-			            unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
-		            }
-	            });
-	            opts.success(unreadCount, unreadMessages);
+                $.each(data.value, function(i, msg) {
+                    if (!msg.IsRead) {
+                        unreadCount = unreadCount + 1;
+                        unreadMessages.push({ sender: msg.Sender.EmailAddress.Name, subject: msg.Subject });
+                    }
+                });
+                opts.success(unreadCount, unreadMessages);
             },
             error: opts.error
         });
