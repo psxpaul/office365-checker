@@ -94,7 +94,7 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            files: ["<%= jshint.files %>", "manifest_template.json", "src/html/**"],
+            files: ["<%= jshint.files %>", "manifest_template.json", "src/html/**/*.html", "src/css/**/*.css", "_locales/**/*.json"],
             tasks: ["jshint", "js-test", "manifest", "copy"]
         }
     });

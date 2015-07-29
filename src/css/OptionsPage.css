@@ -1,0 +1,11 @@
+input[type=text], input[type=password] {
+  height: 20px;
+  width: 175px;
+  padding: 1px 3px;
+  margin: 3px;
+}
+
+#saveCredentialsInputs label {
+  min-width: 5em;
+  display: inline-block;
+}

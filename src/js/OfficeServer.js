@@ -3,7 +3,17 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         feedUrl = office365Url + "api/v1.0/Me/Folders/Inbox/",
         unreadCountUrl = feedUrl + "Messages?$count=true&$filter=IsRead%20eq%20false",
         newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$top=3&$select=IsRead,Sender,Subject",
-        needsAuthentication = false;
+        needsAuthentication = false,
+        savedUsername, savedPassword;
+
+    function setCredentials(username, password) {
+        savedUsername = username;
+        savedPassword = password;
+        if (typeof savedUsername === "string" && typeof savedPassword === "string") {
+            console.log("setting saved creds");
+            needsAuthentication = false;
+        }
+    }
 
     function isOffice365Url(url) {
         return url.indexOf(office365Url) === 0 || url.indexOf(".outlook.com/owa") !== -1;
@@ -18,6 +28,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         $.support.cors = true;
         $.ajax({
             url: unreadCountUrl,
+            username: savedUsername,
+            password: savedPassword,
             beforeSend: opts.before,
             statusCode: {
                 401: function() {
@@ -36,6 +48,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                 } else {
                     $.ajax({
                         url: newestMessagesUrl,
+                        username: savedUsername,
+                        password: savedPassword,
                         success: function(messages) {
                             var unreadMessages = [];
 
@@ -93,6 +107,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         office365Url: office365Url,
         unreadCountUrl: unreadCountUrl,
         getUnreadCount: getUnreadCount,
+        setCredentials: setCredentials,
         chromeUrlFilter: { url: [{urlContains: office365Url}] }
     };
 });

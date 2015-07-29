@@ -16,6 +16,15 @@
     "office365check_refreshIntervalUnits": {
         "message": "minutes"
     },
+    "office365check_saveCredentialsLabel": {
+        "message": "Save Username/Password?"
+    },
+    "office365check_usernameLabel": {
+        "message": "Username"
+    },
+    "office365check_passwordLabel": {
+        "message": "Password"
+    },
     "office365check_name": {
         "message": "Office365 Mail Checker"
     },

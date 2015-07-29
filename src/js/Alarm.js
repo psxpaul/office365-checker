@@ -32,13 +32,16 @@ define(["OfficeServer", "Badge", "Notifier", "ChromeWrapper"], function(OfficeSe
       });
     }
 
-    ChromeWrapper.onDOMContentLoaded(updateInboxCount, OfficeServer.chromeUrlFilter);
-    ChromeWrapper.onReferenceFragmentUpdated(updateInboxCount, OfficeServer.chromeUrlFilter);
-    updateInboxCount();
-    ChromeWrapper.onBrowserActionClick(updateInboxCount);
-
+    function init(interval) {
+        ChromeWrapper.onDOMContentLoaded(updateInboxCount, OfficeServer.chromeUrlFilter);
+        ChromeWrapper.onReferenceFragmentUpdated(updateInboxCount, OfficeServer.chromeUrlFilter);
+        updateInboxCount();
+        ChromeWrapper.onBrowserActionClick(updateInboxCount);
+        setInterval(interval);
+    }
 
     return {
+        init: init,
         setInterval: setInterval
     };
 });

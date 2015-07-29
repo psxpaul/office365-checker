@@ -60,6 +60,13 @@ define(["jquery"], function($) {
             args[key] = value;
             chrome.storage.sync.set(args, $.noop);
         },
+        onChangeInStorage: function(key, callback) {
+            chrome.storage.onChanged.addListener(function(changes, namespace) {
+                if (typeof changes[key] !== "undefined") {
+                    callback(changes[key].newValue);
+                }
+            });
+        },
 
         createTab: function(opts, callback) {
             chrome.tabs.create(opts, callback);
