@@ -10,7 +10,6 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         savedUsername = username;
         savedPassword = password;
         if (typeof savedUsername === "string" && typeof savedPassword === "string") {
-            console.log("setting saved creds");
             needsAuthentication = false;
         }
     }
