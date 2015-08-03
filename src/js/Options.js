@@ -23,8 +23,8 @@ define(["jquery", "sjcl", "ChromeWrapper"], function($, sjcl, ChromeWrapper) {
       });
   }
 
-  function setRefreshInterval(interval) {
-      ChromeWrapper.setInStorage(refreshIntervalKey, interval);
+  function setRefreshInterval(interval, callback) {
+      ChromeWrapper.setInStorage(refreshIntervalKey, interval, callback);
   }
 
   function onSavedCredentialsChange(callback) {
@@ -51,12 +51,12 @@ define(["jquery", "sjcl", "ChromeWrapper"], function($, sjcl, ChromeWrapper) {
       });
   }
 
-  function setSavedCredentials(username, password) {
+  function setSavedCredentials(username, password, callback) {
       var credentials = { "user": username, "pass": password },
           credentialsJson = JSON.stringify(credentials),
           encryptedCredentials = sjcl.encrypt(encryptionKey, credentialsJson);
       console.log("saving credential " + username);
-      ChromeWrapper.setInStorage(credentialsKey, encryptedCredentials);
+      ChromeWrapper.setInStorage(credentialsKey, encryptedCredentials, callback);
   }
 
   return {

@@ -55,10 +55,10 @@ define(["jquery"], function($) {
               callback(data[key]);
             });
         },
-        setInStorage: function(key, value) {
+        setInStorage: function(key, value, callback) {
             var args = {};
             args[key] = value;
-            chrome.storage.sync.set(args, $.noop);
+            chrome.storage.sync.set(args, callback);
         },
         onChangeInStorage: function(key, callback) {
             chrome.storage.onChanged.addListener(function(changes, namespace) {

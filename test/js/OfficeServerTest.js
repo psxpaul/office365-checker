@@ -2,7 +2,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
     var injector = new Squire(),
         mockChromeWrapper = sinon.stub(ChromeWrapper),
         office365Url = "https://outlook.office365.com/",
-        before, error, success;
+        before, error, authenticationError, success;
 
     injector.mock("ChromeWrapper", mockChromeWrapper);
 
@@ -38,6 +38,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
             before = sinon.stub();
             error = sinon.stub();
+            authenticationError = sinon.stub();
             success = sinon.stub();
 
             injector.clean("OfficeServer");
@@ -62,11 +63,12 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
             //getUnreadCount returns a 401 (needs authentication)
             assert.lengthOf(requests, 0);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [401, { "Content-Type": "application/json" }, ""]);
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 1, "error not called!");
             assert.equal(success.callCount, 0, "success unexpectedly called!");
@@ -97,11 +99,12 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
             //getUnreadCount returns a 401 (needs authentication)
             assert.lengthOf(requests, 0);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [401, { "Content-Type": "application/json" }, ""]);
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 1, "error not called!");
             assert.equal(success.callCount, 0, "success unexpectedly called!");
@@ -123,19 +126,21 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
             //getUnreadCount returns a 401 (needs authentication)
             assert.lengthOf(requests, 0);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [401, { "Content-Type": "application/json" }, ""]);
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 1, "error not called!");
             assert.equal(success.callCount, 0, "success unexpectedly called!");
 
             assert.lengthOf(requests, 1);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1);
             assert.equal(error.callCount, 1);
             assert.equal(success.callCount, 0);
@@ -143,23 +148,24 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
         it("registers domContentLoad listener", injector.run(["OfficeServer"], function(OfficeServer) {
             assert.lengthOf(requests, 0);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [401, { "Content-Type": "application/json" }, ""]);
             server.respond();
 
             mockChromeWrapper.onDOMContentLoaded.lastCall.args[0]();
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 2);
         }));
 
         it("calls error callback when NaN is returned from server", injector.run(["OfficeServer"], function(OfficeServer) {
             assert.lengthOf(requests, 0);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, "as1d3dxx"]);
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 1, "error not called!");
             assert.equal(success.callCount, 0, "success unexpectedly called!");
@@ -167,11 +173,12 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
         it("calls success callback when 0 is returned from server", injector.run(["OfficeServer"], function(OfficeServer) {
             assert.lengthOf(requests, 0);
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
             server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, JSON.stringify({ "@odata.count": "0"})]);
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 0, "error unexpectedly called!");
             assert.equal(success.callCount, 1, "success not called!");
@@ -181,7 +188,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
         }));
 
         it("queries for top unread messages", injector.run(["OfficeServer"], function(OfficeServer) {
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
 
             server.respondWith("GET", OfficeServer.unreadCountUrl, [200, {"Content-Type": "application/json"}, JSON.stringify({ "@odata.count": 15 })]);
             server.respondWith("GET", OfficeServer.newestMessagesUrl, [200, {"Content-Type": "application/json"}, JSON.stringify(
@@ -194,6 +201,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 0, "error unexpectedly called!");
             assert.equal(success.callCount, 1, "success not called!");
@@ -207,13 +215,14 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
         }));
 
         it("queries for top unread messages but fails", injector.run(["OfficeServer"], function(OfficeServer) {
-            OfficeServer.getUnreadCount({ before: before, error: error, success: success });
+            OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
 
             server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, JSON.stringify({ "@odata.count": 15})]);
             server.respondWith("GET", OfficeServer.newestMessagesUrl, [500, {}, ""]);
 
             server.respond();
 
+            assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
             assert.equal(before.callCount, 1, "before not called!");
             assert.equal(error.callCount, 0, "error not called!");
             assert.equal(success.callCount, 1, "success unexpectedly called!");

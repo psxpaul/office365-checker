@@ -4,13 +4,17 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         unreadCountUrl = feedUrl + "Messages?$count=true&$filter=IsRead%20eq%20false",
         newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$top=3&$select=IsRead,Sender,Subject",
         needsAuthentication = false,
+        usingStoredCredentials = false,
         savedUsername, savedPassword;
 
     function setCredentials(username, password) {
         savedUsername = username;
         savedPassword = password;
-        if (typeof savedUsername === "string" && typeof savedPassword === "string") {
+        if (typeof savedUsername === "string" && typeof savedPassword === "string" && savedUsername !== "" && savedPassword !== "") {
             needsAuthentication = false;
+            usingStoredCredentials = true;
+        } else {
+            usingStoredCredentials = false;
         }
     }
 
@@ -30,11 +34,6 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             username: savedUsername,
             password: savedPassword,
             beforeSend: opts.before,
-            statusCode: {
-                401: function() {
-                    needsAuthentication = true;
-                }
-            },
             success: function(data) {
                 var unreadCountText = typeof data["@odata.count"] !== "undefined" ? data["@odata.count"] : "NaN";
                 var unreadCount = parseInt(unreadCountText, 10);
@@ -67,7 +66,15 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                     });
                 }
             },
-            error: opts.error
+            error: function(e) {
+                if (e.status === 401 || e.status === 404) {
+                    if (usingStoredCredentials) {
+                        opts.authenticationError();
+                    }
+                    needsAuthentication = true;
+                }
+                opts.error();
+            }
         });
     }
 

@@ -3,7 +3,10 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
         saveCredentialsCheckbox = $("#saveCredentialsCheckbox"),
         saveCredentialsInputs = $("#saveCredentialsInputs").hide(),
         usernameInput = $("#usernameInput"),
-        passwordInput = $("#passwordInput");
+        passwordInput = $("#passwordInput"),
+        cancelButton = $("#cancelButton"),
+        saveButton = $("#saveButton"),
+        form = $("#optionsForm");
 
     $("#refreshIntervalLabel").text(ChromeWrapper.getMessage("office365check_refreshIntervalLabel"));
     $("#refreshIntervalUnits").text(ChromeWrapper.getMessage("office365check_refreshIntervalUnits"));
@@ -30,20 +33,23 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
         saveCredentialsCheckbox.prop("checked", credentialsSaved).trigger("change");
     });
 
-    refreshIntervalInput.bind("propertychange change click keyup input paste", function() {
-        var newValue = parseInt($(this).val(), 10);
-        $(this).val(newValue);
-        Options.setRefreshInterval(newValue);
+    saveButton.click(function() {
+        var newInterval = parseInt(refreshIntervalInput.val(), 10);
+        refreshIntervalInput.val(newInterval);
+        Options.setRefreshInterval(newInterval, function() {
+            Options.setSavedCredentials(usernameInput.val(), passwordInput.val(), function() {
+                window.close();
+            });
+        });
     });
 
-    usernameInput.bind("propertychange change click keyup input paste", function() {
-        var newValue = $(this).val();
-        Options.setSavedCredentials(newValue, passwordInput.val());
+    cancelButton.click(function() {
+        window.close();
     });
 
-    passwordInput.bind("propertychange change click keyup input paste", function() {
-        var newValue = $(this).val();
-        Options.setSavedCredentials(usernameInput.val(), newValue);
+    form.submit(function(e) {
+        e.preventDefault();
+        return false;
     });
 
     saveCredentialsCheckbox.change(function() {

@@ -5,6 +5,12 @@ input[type=text], input[type=password] {
   margin: 3px;
 }
 
+#cancelAndSaveButtons {
+  float: right;
+  clear: both;
+  margin-bottom: 15px;
+}
+
 #saveCredentialsInputs label {
   min-width: 5em;
   display: inline-block;

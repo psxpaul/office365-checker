@@ -30,5 +30,11 @@
     },
     "office365check_node_error": {
         "message": "Error: feed retrieved, but no &lt;fullcount&gt; node found"
+    },
+    "office365check_authentication_error_title": {
+        "message": "Could not authenticate"
+    },
+    "office365check_authentication_error_message": {
+        "message": "Check saved username/password"
     }
 }

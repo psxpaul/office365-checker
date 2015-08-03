@@ -6,26 +6,33 @@
     <script data-main="OptionsPage" src="/src/js/lib/require-2.1.14.min.js"></script>
   </head>
   <body>
-    <div>
-      <label id="refreshIntervalLabel" for="refreshInterval"></label>
-      <input type="number" step="1" min="1" max="100" id="refreshInterval" />
-      <span id="refreshIntervalUnits" />
-    </div>
+    <form id="optionsForm" action="" method="post">
+      <div>
+        <label id="refreshIntervalLabel" for="refreshInterval"></label>
+        <input type="number" step="1" min="1" max="100" id="refreshInterval" />
+        <span id="refreshIntervalUnits" />
+      </div>
 
-    <div>
-      <label id="saveCredentialsLabel" for="refreshInterval"></label>
-      <input type="checkbox" id="saveCredentialsCheckbox" />
-      <div id="saveCredentialsInputs">
-        <div>
-          <label id="usernameLabel" for="usernameInput"></label>
-          <input type="text" id="usernameInput" />
-        </div>
+      <div>
+        <label id="saveCredentialsLabel" for="refreshInterval"></label>
+        <input type="checkbox" id="saveCredentialsCheckbox" />
+        <div id="saveCredentialsInputs">
+          <div>
+            <label id="usernameLabel" for="usernameInput"></label>
+            <input type="text" id="usernameInput" />
+          </div>
 
-        <div>
-          <label id="passwordLabel" for="passwordInput"></label>
-          <input type="password" id="passwordInput" />
+          <div>
+            <label id="passwordLabel" for="passwordInput"></label>
+            <input type="password" id="passwordInput" />
+          </div>
         </div>
       </div>
-    </div>
+
+      <div id="cancelAndSaveButtons">
+        <input id="cancelButton" type="button" value="Cancel" />
+        <input id="saveButton" type="submit" value="Save" />
+      </div>
+    </form>
   </body>
 </html>

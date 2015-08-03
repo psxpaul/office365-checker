@@ -9,7 +9,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     function updateNotification(unreadCount, notificationOptions) {
         if(unreadCount === 0) {
             ChromeWrapper.clearNotification(notificationId, $.noop);
-        } else if(unreadCount > oldNotificationCount) {
+        } else if(unreadCount > oldNotificationCount || typeof unreadCount !== "number" || isNaN(unreadCount)) {
             ChromeWrapper.clearNotification(notificationId, $.noop);
             ChromeWrapper.createNotification(notificationId, notificationOptions, $.noop);
         } else {
@@ -48,6 +48,14 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             }
 
             updateNotification(unreadCount, notificationOptions);
+        },
+        error: function(title, message) {
+            updateNotification(undefined, {
+                type: "basic",
+                title: title,
+                message: message,
+                iconUrl: iconUrl
+            });
         }
     };
 });

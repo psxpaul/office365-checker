@@ -12,6 +12,9 @@ define(["OfficeServer", "Badge", "Notifier", "ChromeWrapper"], function(OfficeSe
                 Badge.setUnreadCount(unreadCount);
                 Notifier.notify(unreadCount, unreadMessages);
             },
+            authenticationError: function() {
+                Notifier.error(ChromeWrapper.getMessage("office365check_authentication_error_title"), ChromeWrapper.getMessage("office365check_authentication_error_message"));
+            },
             error: function() {
                 Badge.stopLoadingAnimation();
                 Badge.setUnreadCount();
