@@ -1,5 +1,6 @@
 define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var office365Url = "https://outlook.office365.com/",
+        officeUrl = "https://outlook.office.com/",
         feedUrl = office365Url + "api/v1.0/Me/Folders/Inbox/",
         unreadCountUrl = feedUrl + "Messages?$count=true&$filter=IsRead%20eq%20false",
         newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$top=3&$select=IsRead,Sender,Subject",
@@ -19,7 +20,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     }
 
     function isOffice365Url(url) {
-        return url.indexOf(office365Url) === 0 || url.indexOf(".outlook.com/owa") !== -1;
+        return url.indexOf(office365Url) === 0 ||url.indexOf(officeUrl) === 0 || url.indexOf(".outlook.com/owa") !== -1;
     }
 
     function getUnreadCount(opts) {

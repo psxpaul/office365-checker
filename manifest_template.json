@@ -25,6 +25,7 @@
         "tabs",
         "webNavigation",
         "*://*.office365.com/",
+        "*://*.office.com/",
         "*://*.outlook.com/"
     ],
     "version": "0"
