@@ -7,13 +7,18 @@
   </head>
   <body>
     <form id="optionsForm" action="" method="post">
-      <div>
+      <div class="option_field">
         <label id="refreshIntervalLabel" for="refreshInterval"></label>
         <input type="number" step="1" min="1" max="100" id="refreshInterval" />
         <span id="refreshIntervalUnits" />
       </div>
 
-      <div>
+      <div class="option_field">
+        <label id="disableNotificationsLabel" for="disableNotifications"></label>
+        <input type="checkbox" id="disableNotificationsCheckbox" />
+      </div>
+
+      <div class="option_field">
         <label id="saveCredentialsLabel" for="refreshInterval"></label>
         <input type="checkbox" id="saveCredentialsCheckbox" />
         <div id="saveCredentialsInputs">
