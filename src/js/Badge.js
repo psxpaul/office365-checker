@@ -37,11 +37,23 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                 ChromeWrapper.setBadgeIcon({imageData: canvasContext.getImageData(0, 0, canvas.width, canvas.height)});
             } catch(e) {
                 //console.dir(e);
-                ChromeWrapper.setBadgeIcon({path: notLoggedInImage.attr("src")});
+                ChromeWrapper.setBadgeIcon({
+                    path: {
+                        "19": "/src/images/office365_not_logged_in.png",
+                        "38": "/src/images/office365_not_logged_in_retina.png"
+                    }
+                });
             }
 
             if (rotation <= 1) {
                 setTimeout(doFlip, animationSpeed);
+            } else {
+                ChromeWrapper.setBadgeIcon({
+                    path: {
+                        "19": "/src/images/office365_logged_in.png",
+                        "38": "/src/images/office365_logged_in_retina.png"
+                    }
+                });
             }
         };
 
@@ -62,13 +74,23 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
         },
         setUnreadCount: function(unreadCount) {
             if (typeof unreadCount === "number") {
-                ChromeWrapper.setBadgeIcon({path: loggedInImage.attr("src")});
+                ChromeWrapper.setBadgeIcon({
+                    path: {
+                        "19": "/src/images/office365_logged_in.png",
+                        "38": "/src/images/office365_logged_in_retina.png"
+                    }
+                });
                 ChromeWrapper.setBadgeBgColor({color:[0, 113, 197, 255]});
                 ChromeWrapper.setBadgeText({
                     text: unreadCount === 0 ? "" : unreadCount.toString()
                 });
             } else {
-                ChromeWrapper.setBadgeIcon({path: notLoggedInImage.attr("src")});
+                ChromeWrapper.setBadgeIcon({
+                    path: {
+                        "19": "/src/images/office365_not_logged_in.png",
+                        "38": "/src/images/office365_not_logged_in_retina.png"
+                    }
+                });
                 ChromeWrapper.setBadgeBgColor({color:[190, 190, 190, 230]});
                 ChromeWrapper.setBadgeText({text:"?"});
             }
