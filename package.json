@@ -1,6 +1,6 @@
 {
   "name": "office365-checker",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "devDependencies": {
     "grunt": "0.4.5",
     "grunt-contrib-clean": "0.6.0",
