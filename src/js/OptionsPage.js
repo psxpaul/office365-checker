@@ -22,7 +22,7 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
     });
 
     Options.getDisableNotifications(function(disableSetting) {
-        disableNotificationsCheckbox.prop('checked', disableSetting)
+        disableNotificationsCheckbox.prop("checked", disableSetting);
     });
 
     Options.getSavedCredentials(function(username, password) {

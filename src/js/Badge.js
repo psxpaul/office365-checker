@@ -1,6 +1,8 @@
 define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var loggedInImage = $("#loggedInImage"),
+        loggedInImageRetina = $("#loggedInImageRetina"),
         notLoggedInImage = $("#notLoggedInImage"),
+        notLoggedInImageRetina = $("#notLoggedInImageRetina"),
         oldUnreadCount,
         loadingTimer = 0,
         loadingFrames = [".   ", " .  ", "  . ", "   ."];
@@ -39,8 +41,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
                 //console.dir(e);
                 ChromeWrapper.setBadgeIcon({
                     path: {
-                        "19": "/src/images/office365_not_logged_in.png",
-                        "38": "/src/images/office365_not_logged_in_retina.png"
+                        "19": notLoggedInImage.attr("src"),
+                        "38": notLoggedInImageRetina.attr("src")
                     }
                 });
             }
@@ -50,8 +52,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             } else {
                 ChromeWrapper.setBadgeIcon({
                     path: {
-                        "19": "/src/images/office365_logged_in.png",
-                        "38": "/src/images/office365_logged_in_retina.png"
+                        "19": loggedInImage.attr("src"),
+                        "38": loggedInImageRetina.attr("src")
                     }
                 });
             }
@@ -76,8 +78,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             if (typeof unreadCount === "number") {
                 ChromeWrapper.setBadgeIcon({
                     path: {
-                        "19": "/src/images/office365_logged_in.png",
-                        "38": "/src/images/office365_logged_in_retina.png"
+                        "19": loggedInImage.attr("src"),
+                        "38": loggedInImageRetina.attr("src")
                     }
                 });
                 ChromeWrapper.setBadgeBgColor({color:[0, 113, 197, 255]});
@@ -87,8 +89,8 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             } else {
                 ChromeWrapper.setBadgeIcon({
                     path: {
-                        "19": "/src/images/office365_not_logged_in.png",
-                        "38": "/src/images/office365_not_logged_in_retina.png"
+                        "19": notLoggedInImage.attr("src"),
+                        "38": notLoggedInImageRetina.attr("src")
                     }
                 });
                 ChromeWrapper.setBadgeBgColor({color:[190, 190, 190, 230]});

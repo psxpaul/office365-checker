@@ -2,7 +2,7 @@ define(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Option
     var notificationImage = $("#notificationImage"),
         iconUrl = notificationImage.attr("src"),
         notificationId = "office365_checker_notification",
-        notificationsDisabled = false;
+        notificationsDisabled = false,
         oldNotificationCount = 0;
 
     ChromeWrapper.onNotificationClick(ChromeWrapper.browserActionClick);

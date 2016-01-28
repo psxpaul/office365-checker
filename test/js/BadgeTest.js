@@ -4,7 +4,9 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
     injector.mock("ChromeWrapper", mockChromeWrapper);
     $("<img id='loggedInImage' src='src/images/office365_logged_in.png' style='display:none'></img>").appendTo("body");
+    $("<img id='loggedInImageRetina' src='src/images/office365_logged_in_retina.png' style='display:none'></img>").appendTo("body");
     $("<img id='notLoggedInImage' src='src/images/office365_not_logged_in.png' style='display:none'></img>").appendTo("body");
+    $("<img id='notLoggedInImageRetina' src='src/images/office365_not_logged_in_retina.png' style='display:none'></img>").appendTo("body");
     $("<canvas id='badgeCanvas' style='display:none'></canvas>").appendTo("body");
 
     describe("BadgeTest", function() {
@@ -85,7 +87,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             assertCallCount(1, 1, 1);
 
             assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[190, 190, 190, 230]}));
-            assert.isTrue(mockChromeWrapper.setBadgeIcon.lastCall.calledWithMatch({path: "src/images/office365_not_logged_in.png"}));
+            assert.isTrue(mockChromeWrapper.setBadgeIcon.lastCall.calledWithMatch({path: { "19": "src/images/office365_not_logged_in.png", "38": "src/images/office365_not_logged_in_retina.png" }}));
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "?"}));
         }));
 
@@ -98,12 +100,12 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             assertCallCount(1, 2, 1);
 
             assert.isTrue(mockChromeWrapper.setBadgeBgColor.lastCall.calledWithMatch({color:[0, 113, 197, 255]}), "badgeBgColor not called correctly");
-            assert.isTrue(mockChromeWrapper.setBadgeIcon.getCall(0).calledWithMatch({path: "src/images/office365_logged_in.png"}), "badgeIcon not called correctly(0)");
+            assert.isTrue(mockChromeWrapper.setBadgeIcon.getCall(0).calledWithMatch({path: { "19": "src/images/office365_logged_in.png", "38": "src/images/office365_logged_in_retina.png" }}), "badgeIcon not called correctly(0)");
             //assert.isTrue(mockChromeWrapper.setBadgeIcon.getCall(1).calledWithMatch({imageData: {}}) , "badgeIcon not called correctly(1)");
             assert.isTrue(mockChromeWrapper.setBadgeText.lastCall.calledWithMatch({text: "3"}), "four");
 
             clock.tick(500);
-            assertCallCount(1, 37, 1);
+            assertCallCount(1, 38, 1);
 
             //for(var i=2; i<37; i+=1) {
                 //assert.isTrue(mockChromeWrapper.setBadgeIcon.getCall(i).calledWithMatch({imageData: {}}));
@@ -111,7 +113,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
 
             Badge.setUnreadCount(0);
             clock.tick(500);
-            assertCallCount(2, 74, 2);
+            assertCallCount(2, 76, 2);
 
             clock.restore();
         }));
