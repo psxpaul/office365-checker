@@ -22,5 +22,5 @@ Installing Unpacked (best for local development)
 This will automatically re-run jshint, all unit tests, and rebuild the *dist/unpacked* directory. (note: you will still have to refresh the extension in Chrome to see any changes take effect)
 
 Other useful grunt commands:
-grunt (will build and run all unit tests)
-grunt js-test-server (will start http server hosting test files, allowing you to run tests in your browser at localhost:8981)
+- grunt (will build and run all unit tests)
+- grunt js-test-server (will start http server hosting test files, allowing you to run tests in your browser at localhost:8981)
