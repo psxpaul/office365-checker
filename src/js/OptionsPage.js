@@ -2,6 +2,7 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
     var refreshIntervalInput = $("#refreshInterval"),
         saveCredentialsCheckbox = $("#saveCredentialsCheckbox"),
         saveCredentialsInputs = $("#saveCredentialsInputs").hide(),
+        disableNotificationsCheckbox = $("#disableNotificationsCheckbox"),
         usernameInput = $("#usernameInput"),
         passwordInput = $("#passwordInput"),
         cancelButton = $("#cancelButton"),
@@ -10,6 +11,7 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
 
     $("#refreshIntervalLabel").text(ChromeWrapper.getMessage("office365check_refreshIntervalLabel"));
     $("#refreshIntervalUnits").text(ChromeWrapper.getMessage("office365check_refreshIntervalUnits"));
+    $("#disableNotificationsLabel").text(ChromeWrapper.getMessage("office365check_disableNotificationsLabel"));
 
     $("#saveCredentialsLabel").text(ChromeWrapper.getMessage("office365check_saveCredentialsLabel"));
     $("#usernameLabel").text(ChromeWrapper.getMessage("office365check_usernameLabel"));
@@ -17,6 +19,10 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
 
     Options.getRefreshInterval(function(interval) {
         refreshIntervalInput.val(interval);
+    });
+
+    Options.getDisableNotifications(function(disableSetting) {
+        disableNotificationsCheckbox.prop('checked', disableSetting)
     });
 
     Options.getSavedCredentials(function(username, password) {
@@ -37,8 +43,10 @@ require(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Optio
         var newInterval = parseInt(refreshIntervalInput.val(), 10);
         refreshIntervalInput.val(newInterval);
         Options.setRefreshInterval(newInterval, function() {
-            Options.setSavedCredentials(usernameInput.val(), passwordInput.val(), function() {
-                window.close();
+            Options.setDisableNotifications(disableNotificationsCheckbox.is(":checked"), function(){
+                Options.setSavedCredentials(usernameInput.val(), passwordInput.val(), function() {
+                    window.close();
+                });
             });
         });
     });

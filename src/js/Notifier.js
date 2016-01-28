@@ -1,22 +1,29 @@
-define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
+define(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Options) {
     var notificationImage = $("#notificationImage"),
         iconUrl = notificationImage.attr("src"),
         notificationId = "office365_checker_notification",
+        notificationsDisabled = false;
         oldNotificationCount = 0;
 
     ChromeWrapper.onNotificationClick(ChromeWrapper.browserActionClick);
 
-    function updateNotification(unreadCount, notificationOptions) {
-        if(unreadCount === 0) {
-            ChromeWrapper.clearNotification(notificationId, $.noop);
-        } else if(unreadCount > oldNotificationCount || typeof unreadCount !== "number" || isNaN(unreadCount)) {
-            ChromeWrapper.clearNotification(notificationId, $.noop);
-            ChromeWrapper.createNotification(notificationId, notificationOptions, $.noop);
-        } else {
-            ChromeWrapper.updateNotification(notificationId, notificationOptions, $.noop);
-        }
+    Options.getDisableNotifications(function(disabledSetting){
+        notificationsDisabled = disabledSetting;
+    });
 
-        oldNotificationCount = unreadCount;
+    function updateNotification(unreadCount, notificationOptions) {
+        if (!notificationsDisabled){
+           if(unreadCount === 0) {
+                ChromeWrapper.clearNotification(notificationId, $.noop);
+            } else if(unreadCount > oldNotificationCount || typeof unreadCount !== "number" || isNaN(unreadCount)) {
+                ChromeWrapper.clearNotification(notificationId, $.noop);
+                ChromeWrapper.createNotification(notificationId, notificationOptions, $.noop);
+            } else {
+                ChromeWrapper.updateNotification(notificationId, notificationOptions, $.noop);
+            }
+
+            oldNotificationCount = unreadCount;
+        }
     }
 
     return {

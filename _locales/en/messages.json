@@ -19,6 +19,9 @@
     "office365check_saveCredentialsLabel": {
         "message": "Save Username/Password?"
     },
+    "office365check_disableNotificationsLabel": {
+        "message": "Disable Popup Notifications?"
+    },
     "office365check_usernameLabel": {
         "message": "Username"
     },

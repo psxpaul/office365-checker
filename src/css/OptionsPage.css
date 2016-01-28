@@ -5,10 +5,23 @@ input[type=text], input[type=password] {
   margin: 3px;
 }
 
+.option_field{
+	margin-bottom:13px;
+}
+
+#refreshInterval{
+	vertical-align:bottom;
+}
+
 #cancelAndSaveButtons {
   float: right;
   clear: both;
   margin-bottom: 15px;
+}
+
+#saveCredentialsInputs {
+  margin-top: 8px;
+  margin-left: 15px;
 }
 
 #saveCredentialsInputs label {

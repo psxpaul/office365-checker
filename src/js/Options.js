@@ -1,5 +1,6 @@
 define(["jquery", "sjcl", "ChromeWrapper"], function($, sjcl, ChromeWrapper) {
   var refreshIntervalKey = "office365-checker-interval",
+      disableNotificationsKey = "office365-disable-notifications",
       encryptionKey = "office365-checker-suPeRseCr3tD0nTrEadTH1$",
       credentialsKey = "office365-checker-credentials";
 
@@ -25,6 +26,20 @@ define(["jquery", "sjcl", "ChromeWrapper"], function($, sjcl, ChromeWrapper) {
 
   function setRefreshInterval(interval, callback) {
       ChromeWrapper.setInStorage(refreshIntervalKey, interval, callback);
+  }
+
+  function getDisableNotifications(callback) {
+      ChromeWrapper.getFromStorage(disableNotificationsKey, function(disabledStr) {
+          if (typeof disabledStr === "undefined" || isNaN(disabledStr)) {
+              callback(false);
+          } else {
+              callback(disabledStr);
+          }
+      });
+  }
+
+  function setDisableNotifications(disabledSetting, callback) {
+      ChromeWrapper.setInStorage(disableNotificationsKey, disabledSetting, callback);
   }
 
   function onSavedCredentialsChange(callback) {
@@ -65,6 +80,8 @@ define(["jquery", "sjcl", "ChromeWrapper"], function($, sjcl, ChromeWrapper) {
       setSavedCredentials: setSavedCredentials,
       onRefreshIntervalChange: onRefreshIntervalChange,
       getRefreshInterval: getRefreshInterval,
-      setRefreshInterval: setRefreshInterval
+      setRefreshInterval: setRefreshInterval,
+      setDisableNotifications: setDisableNotifications,
+      getDisableNotifications: getDisableNotifications
   };
 });
