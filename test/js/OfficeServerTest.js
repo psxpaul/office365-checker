@@ -175,7 +175,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             assert.lengthOf(requests, 0);
             OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
             assert.lengthOf(requests, 1);
-            server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, JSON.stringify({ "@odata.count": "0"})]);
+            server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, JSON.stringify({ "UnreadItemCount": "0"})]);
             server.respond();
 
             assert.equal(authenticationError.callCount, 0, "authenticationError should not be called!");
@@ -184,13 +184,12 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
             assert.equal(success.callCount, 1, "success not called!");
 
             assert.equal(success.lastCall.args[0], 0);
-            assert.deepEqual(success.lastCall.args[1], []);
         }));
 
         it("queries for top unread messages", injector.run(["OfficeServer"], function(OfficeServer) {
             OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
 
-            server.respondWith("GET", OfficeServer.unreadCountUrl, [200, {"Content-Type": "application/json"}, JSON.stringify({ "@odata.count": 15 })]);
+            server.respondWith("GET", OfficeServer.unreadCountUrl, [200, {"Content-Type": "application/json"}, JSON.stringify({ "UnreadItemCount": 15 })]);
             server.respondWith("GET", OfficeServer.newestMessagesUrl, [200, {"Content-Type": "application/json"}, JSON.stringify(
                 { value: [
                     { Sender: {EmailAddress: {Name: "Joe"}}, Subject: "MessageOne"},
@@ -217,7 +216,7 @@ define(["ChromeWrapper", "Squire", "jquery"], function(ChromeWrapper, Squire, $)
         it("queries for top unread messages but fails", injector.run(["OfficeServer"], function(OfficeServer) {
             OfficeServer.getUnreadCount({ authenticationError: authenticationError, before: before, error: error, success: success });
 
-            server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, JSON.stringify({ "@odata.count": 15})]);
+            server.respondWith("GET", OfficeServer.unreadCountUrl, [200, { "Content-Type": "application/json" }, JSON.stringify({ "UnreadItemCount": 15})]);
             server.respondWith("GET", OfficeServer.newestMessagesUrl, [500, {}, ""]);
 
             server.respond();

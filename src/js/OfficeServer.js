@@ -1,9 +1,9 @@
 define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
     var office365Url = "https://outlook.office365.com/",
         officeUrl = "https://outlook.office.com/",
-        feedUrl = office365Url + "api/v1.0/Me/Folders/Inbox/",
-        unreadCountUrl = feedUrl + "Messages?$count=true&$filter=IsRead%20eq%20false",
-        newestMessagesUrl = feedUrl + "Messages?$filter=IsRead%20eq%20false&$top=3&$select=IsRead,Sender,Subject",
+        feedUrl = office365Url + "api/v1.0/Me/Folders/Inbox",
+        unreadCountUrl = feedUrl,
+        newestMessagesUrl = feedUrl + "/Messages?$filter=IsRead%20eq%20false&$top=3&$select=IsRead,Sender,Subject",
         needsAuthentication = false,
         usingStoredCredentials = false,
         savedUsername, savedPassword;
@@ -36,8 +36,7 @@ define(["jquery", "ChromeWrapper"], function($, ChromeWrapper) {
             password: savedPassword,
             beforeSend: opts.before,
             success: function(data) {
-                var unreadCountText = typeof data["@odata.count"] !== "undefined" ? data["@odata.count"] : "NaN";
-                var unreadCount = parseInt(unreadCountText, 10);
+                var unreadCount = data.UnreadItemCount;
                 needsAuthentication = false;
 
                 if(isNaN(unreadCount)) {
