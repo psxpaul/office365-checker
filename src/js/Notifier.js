@@ -40,6 +40,7 @@ define(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Option
                     type: "basic",
                     title: "New Office365 Mail",
                     message: "You have " + unreadCount + " unread messages",
+                    requireInteraction: true,
                     iconUrl: iconUrl
                 };
             } else {
@@ -47,6 +48,7 @@ define(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Option
                     type: "list",
                     title: unreadCount + " new messages",
                     message: "You have " + unreadCount + " unread messages",
+                    requireInteraction: true,
                     iconUrl: iconUrl,
                     items: $.map(unreadMessages, function(msg, i) {
                         return { title: msg.sender, message: msg.subject };
@@ -61,6 +63,7 @@ define(["jquery", "ChromeWrapper", "Options"], function($, ChromeWrapper, Option
                 type: "basic",
                 title: title,
                 message: message,
+                requireInteraction: true,
                 iconUrl: iconUrl
             });
         }

@@ -58,6 +58,7 @@ module.exports = function(grunt) {
                 strict: false,
                 undef: true,
                 unused: "vars",
+                reporterOutput: "",
 
                 browser: true,
                 globals: {
