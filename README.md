@@ -5,9 +5,8 @@ Displays the number of unread messages in your Office365 Mail inbox. You can als
 
 Installing via Chrome Web Store
 -------------------------------
-1. Click [here](https://chrome.google.com/webstore/detail/office365-mail-checker/cbefiefjdpebjofikekaolbbninhoeba) to go to the Office365 Chrome Web Store page
-2. Click the *Add to Chrome* button
- 
+This extension is no longer available in the Chrome Web Store due to reasons
+
 Installing Unpacked (best for local development)
 ------------------------------------------------
 1. Clone this repo
